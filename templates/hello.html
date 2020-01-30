@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% if a == 1 %}
+	<h1>{{ hello }}</h1>
+{% else %}
+	<h2>GGG</h2>
+{% endif %}
+
+<ul>
+{% for athlete in athlete_list %}
+    <li>{{ athlete }}</li>
+{% endfor %}
+{% for athlete in athlete_list reversed %}
+    <li>{{ athlete }}</li>
+{% endfor %}
+</ul>
+
+{# This is a instruction #}
+<p>{{'Name'|lower}}</p>
+{% include 'nav.html' %}
+
+
+
+{% block mainbody %}
+<p>Mr. zi huan come on fuck!!1!1!!</p>
+{% endblock %}
