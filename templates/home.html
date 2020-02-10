@@ -91,6 +91,7 @@
 	</style>
 </head>
 <body onselectstart="return false">
+	{% load static %}
     <form action="/blog-submit" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="text" name="q">
@@ -146,7 +147,7 @@
  			而是要display:inline-block。这个html的同行的意思可能有点奇怪，同行就是同行，同行恐怕是视觉定义的同行，
  		而并非逻辑上的同行。我觉得大概的确是如此的。如果使用display:block，这个图片的高度没有被考虑进来，很奇怪。所以
  	父级元素的div的display需要为inline-block，但是为什么呢？</span>
- 			<img src="images/maluxilu.jpg" align='left' width="200px">
+ 			<img src="static/images/maluxilu.jpg" align='left' width="200px">
  		</div>
  		
  		<div style="width: 300px">
@@ -254,8 +255,8 @@
 
  		<div class="test" style="height: 200px;width: 200px;background-color: blue;color: yellow;position: relative;">
  			<div class="pp" style="position: absolute;left: 50%;top: 50%;">
- 				<img src="images/siye.jpg" style="visibility: visible;" width="100px" class = "in-hide">
- 				<img src="images/siye.jpg" style="position: absolute;left: -50%;top: -50%;" width="100px" class = "in-show">
+ 				<img src="/static/images/siye.jpg" style="visibility: visible;" width="100px" class = "in-hide">
+ 				<img src="/static/images/siye.jpg" style="position: absolute;left: -50%;top: -50%;" width="100px" class = "in-show">
  			</div>
  		</div>
 
