@@ -21,6 +21,8 @@ from . import view
 from . import testdb,search,search2
 
 urlpatterns = [
+    path('',view.home),
+    path('blog-submit',view.blog_submit),
     path('hello/', view.hello),
     path('testdb/',testdb.testdb),
     url(r'^search-form$', search.search_form),

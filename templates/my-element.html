@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>菜鸟教程(runoob.com)</title>
+	<style type="text/css">
+		input{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+    	function showinfo(){
+    		console.log(this.files[0])
+    		img = document.createElement('img')
+    		img.src = this.files[0];
+    		document.body.appendChild(img);
+    	}
+
+    </script>
+    <form action="/blog-submit" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!--<greeting>Hello,world</greeting>
+        <self-element content='THIS IS MY ELEMENT'>这是我自己定义的元素</self-element>-->
+        <share-buttons/>
+        <input type="text" name="q">
+        <input id='add' type="file" name="f" onchange="showinfo.bind(this)();" multiple accept="image/*" />
+        <input type="submit" value="Submit">
+    </form>
+ 	
+ 	<script type="text/javascript">
+ 		//关于自定义元素的脚本
+ 		function customTag(tagname,fn){
+    		Array.from(document.getElementsByTagName(tagname)).forEach(fn);
+    	}
+    	function greetingHandler(e){
+    		e.innerHTML = '草拟吗！';
+    	}
+    	customTag('greeting',greetingHandler);
+    	var tabs = document.createElement('tab-s');
+    	console.log(tabs instanceof HTMLUnknownElement)
+    	console.log(tabs instanceof HTMLElement)
+    	class MyElement extends HTMLElement{
+    		get content(){
+    			return this.getAttribute('content');
+    		}
+    		set content(val){
+    			this.setAttribute('content',val);
+    		}
+    	}
+    	function myelementHandler(element){
+    		element.innerHTML = element.content;
+    	}
+    	window.customElements.define('self-element',MyElement);
+    	customTag('self-element',myelementHandler)
+ 	</script>
+</body>
+</html>

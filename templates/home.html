@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="chenshf">
+	<meta name="description" content="My Web study">
+	<meta name="keywords" content='HTML CSS JS'>
+	<title>前端苦逼学习</title>
+	<link rel="stylesheet" type="text/css" href="xxxx.css">
+	<style type="text/css">
+		input{
+			display: block;
+		}
+
+		#w3cschool-html{
+			display: none;
+		}
+		#w3cschool-html-title, #w3cschool-css-title {
+			background-color: #AAAAAA;
+			color: white;
+			width: 300px;
+			height: 50px;
+			text-align: center;
+			line-height: 50px;
+			font-size: 20px;
+			border-radius: 10px 10px 10px 10px;
+			border-style: solid;
+			border-color: 1px;
+			border-color: black;
+		}
+		.block{
+			display: block;
+		}
+		.radio{
+			display: inline;
+		}
+		#study-need{
+			background-image:url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581324462967&di=75e21b29a3cde3a3a9b55e8129627d19&imgtype=0&src=http%3A%2F%2F05.imgmini.eastday.com%2Fmobile%2F20180721%2F20180721200807_42db73ac70352f56a064bba4fba5de52_7.jpeg');
+			background-repeat: no-repeat;
+			background-position: 200px 100px;
+			background-size: contain;
+		}
+		.txt-align-test1{
+			display: inline;
+		}
+		.txt-align-test1 div{
+			width: 100px;
+			height: 100px;
+			border: 1px solid black;
+			display: inline-block;
+			vertical-align: baseline;
+			margin: 0;
+			line-height: 50px;
+		}
+		.txt-align-test2{
+			display: inline;
+		}
+		.txt-align-test2 div{
+			width: 100px;
+			height: 100px;
+			border: 1px solid black;
+			display: inline-block;
+			vertical-align: top;
+			margin: 0;
+			line-height: 50px;
+		}
+		.txt-align-test3{
+			display: block;
+		}
+		.txt-align-test3 div{
+			width: 100px;
+			height: 100px;
+			border: 1px solid black;
+			display: block;
+			float: left;
+			margin: 0;
+			line-height: 50px;
+		}
+		.txt-align-test3+*{
+			clear: both;
+		}
+		.box-model-test{
+			margin: 10px;
+			outline: blue dotted;
+			width: 100px;
+			padding: 30px;
+			border: 10px dotted black;
+			background-color: yellow;
+			float: left;
+		}
+	</style>
+</head>
+<body onselectstart="return false">
+    <form action="/blog-submit" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="q">
+        <input id='add' type="file" name="f" onchange="showinfo.bind(this)();" multiple accept="image/*" value="选择图片" />
+        <input type="submit" value="Submit">
+    </form>
+ 	<div id='study-need'>
+ 		<h3>学习需求</h3>
+ 		<input type="checkbox" style="display: inline;" value='w3cschool html'>w3cschool html<br>
+ 		<input type="checkbox" style="display: inline;" value='w3cschool css'>w3cschool css<br>
+ 		<input type="checkbox" style="display: inline;" value='w3cschool js'>w3cschool js<br>
+ 		<input type="checkbox" style="display: inline;" value='js高级程序设计'>js高级程序设计<br>
+ 		<input type="checkbox" style="display: inline;">jQuery<br>
+ 		<input type="checkbox" style="display: inline;">npm nodejs<br>
+ 		<input type="checkbox" style="display: inline;">ES6<br>
+ 		<input type="checkbox" style="display: inline;">ESM<br>
+ 		<input type="checkbox" style="display: inline;">vue<br>
+ 		<input type="checkbox" style="display: inline;">搭建个人博客<br>
+ 	</div>
+ 	<div id='w3cschool-html-title'>HTML基础</div>
+ 	<div id='w3cschool-html'>
+ 		<b>粗体字使用b标签</b><br>
+ 		<strong>或者strong标签</strong><br>
+ 		<i>使用标签i斜体字</i><br>
+ 		<em>em标签则是表达侧重</em><br>
+ 		<small>small是小号字</small><br>
+ 		<sub>上下标supsub</sub><sup>上</sup><br>
+ 		<ins>ins是下划线</ins><br>
+ 		<del>del是删除字</del><br>
+ 		<p style="font-weight: bolder;">使用css font-weight:bolder也可以加粗字体</p>
+ 		<p style="font-weight: lighter;">lighter甚至减轻字体</p>
+ 		<p style="font-style: italic;">font-style:italic斜体</p>
+ 		<table border="1" cellpadding="10">
+ 			<tr>
+ 				<th colspan="2">text-decoration</th>
+ 			</tr>
+ 			<tr>
+ 				<td style="text-decoration: blink;">blink</td>
+ 				<td style='text-decoration: line-through;'>line-through</td>
+ 			</tr>
+ 			<tr>
+ 				<td style='text-decoration:underline;'>underline</td>
+ 				<td style='text-decoration:overline;'>overline</td>
+ 			</tr>
+ 			<tr>
+ 				<td colspan="2" style="text-decoration: none;">none</td>
+ 			</tr>
+ 		</table>
+
+ 		<div style="display:inline-block;">
+ 			<bdo dir="rtl"><strong>bdo标签</strong>可以使文字从右往左</bdo>
+ 			<span>图片标签的align属性非常有意思，会导致其他元素移动,使用display:block无法解决，
+ 			而是要display:inline-block。这个html的同行的意思可能有点奇怪，同行就是同行，同行恐怕是视觉定义的同行，
+ 		而并非逻辑上的同行。我觉得大概的确是如此的。如果使用display:block，这个图片的高度没有被考虑进来，很奇怪。所以
+ 	父级元素的div的display需要为inline-block，但是为什么呢？</span>
+ 			<img src="images/maluxilu.jpg" align='left' width="200px">
+ 		</div>
+ 		
+ 		<div style="width: 300px">
+ 			<p><strong>关于div布局和table布局尝试</strong></p>
+ 			<div style="text-align:center">
+ 				<div style="background-color: #FFA500" >这是一个标题</div>
+ 				<div style="display: inline-block;background-color: #FFD700;height: 200px;float: left">这是<br>左侧的<br>文字</div>
+ 				<div style="display: block;background-color: #EEEEEE;height: 200px">这是右侧的文字</div>
+ 				<div style="background-color:#FFA500">这是底部的文字</div>
+ 			</div>
+ 		</div>
+
+ 		<form>
+ 			请输入你的账号：<input type="text" name="accountnum" value="123456789" style="height: 100px;">
+ 			请输入你的密码：<input type="password" name="pwd" placeholder="密码键入">
+ 			单选按钮:<input type="radio" name="sex" value='male' class="radio">male
+ 			<input type="radio" name="sex" value="female" class="radio" checked="checked">female
+ 			<input type="radio" name="food" value="苹果" class="radio">apple
+ 			<input type="radio" name="food" value="huawei" class="radio" checked>huawei
+ 			<input type="checkbox" name="machine" value='linux' class="radio" checked>linux
+ 			<input type="checkbox" name="machine" value='windows' class="block radio" checked>windows
+ 			<input type="submit" name="提交">
+ 			<textarea cols="30" rows="2" placeholder="nonthing"></textarea>
+ 		</form>
+ 		<p>注意css优先级，!important最高，然后是内联，class根据在css文件中的声明顺序，越后声明的越优先。</p>
+ 		<form>
+ 			
+ 		</form>
+ 		<a href="https://www.baidu.com" target="_blank">注意链接可以通过target属性设置跳转方向</a>
+ 		<a href="https://www.baidu.com" target="_self">注意链接可以通过target属性设置跳转方向</a>
+ 		<a href="https://www.baidu.com" target="_parent">注意链接可以通过target属性设置跳转方向</a>
+ 		<a href="https://www.baidu.com" target="_top">注意链接可以通过target属性设置跳转方向</a>
+ 		<a href="https://www.baidu.com" target="iframe_a">修改以下框架的链接地址</a>
+ 		<br>
+
+ 		<!--<object data="images/1.mp3"></object><br>-->
+ 		<!--<object data="images/1.mp4"></object><br>-->
+ 		<!--<audio controls width="300" height="300">
+  			<source src="images/1.mp3" type="audio/mpeg">
+  			Your browser does not support this audio format.
+		</audio>
+		<video controls width="300" height="300">
+			<source src="images/1.mp4" type="video/mp4">
+		</video>
+ 		<iframe src="https://www.w3cschool.cn/html/html-sounds.html" width="300" height="300" name="iframe_a"></iframe><br>-->
+ 		
+ 	</div>
+
+ 	<div id='w3cschool-css-title'>css基础</div>
+ 	<div id='w3cschool-css'>
+
+ 		<details>
+ 			<summary>white-space</summary>
+ 		<pre>使用pre便签可以处      理多个空格
+的情况，同时也会换行</pre>
+ 		<p style="white-space: pre">使用white-space属性的pre可以达到pre         的
+效果</p>
+		<p style="white-space: nowrap">使用nowrap的话，空格也    会无视</p>
+		<p style="white-space: pre-wrap;">使用pre-wrap的话，空格被保留但是
+		也会       换行</p>
+		<p style="white-space: pre-line;">使用pre-line的话，空格被合并但是
+		也会       换行</p>
+ 		</details>
+
+ 		<p>
+ 		现在我们遭遇了这样的一个问题，就是说，下面是四个div，css属性设置为inline-block,所以他们排在同一行，
+ 		问题是，前三个div被下沉了，观察了许久，调整line-height,我发现，前三个的div的文字的底线对齐着第四个div
+ 		的底线，这说明是css属性vertical-align的问题，这个属性的默认值是baseline,文字会对准父元素的基线，所以只要把他
+ 		改成top就可以解决了,注意是在子div修改。但是仍然存在问题，html本身会把换行符号解析成空格，导致的问题是，
+ 		div直接存在间隙，所以我们可以考虑使用float来表达效果吧？所以我觉得还是使用float代替这种inline-block吧。
+ 		</p>
+ 		<div class='txt-align-test1'>
+ 			<div>aaa</div>
+ 			<div>aaa</div>
+ 			<div>aaa</div>
+ 			<div></div>
+ 		</div>
+ 		<div class='txt-align-test2'>
+ 			<div>aaa</div>
+ 			<div>aaa</div>
+ 			<div>aaa</div>
+ 			<div></div>
+ 		</div><br>
+ 		<div class='txt-align-test3'>
+ 			<div>aaa</div>
+ 			<div>bbb</div>
+ 			<div>ccc</div>
+ 			<div></div>
+ 		</div>
+ 		<p>居中练习</p>
+ 		<div style="width: 300px;height: 300px;border: 1px dotted;">
+ 			
+ 			<div style="width: 240px;height: 240px;border: 1px solid;margin: 0 auto;margin-top:29px;margin-bottom:29px;">
+ 				
+ 				<div style="width: 180px;height: 160px;border: 10px dotted;margin: 0 auto;position: relative;top: 50%;transform: translate(0,-50%);">
+ 					
+ 					<div style="width: 120px;height: 80px;border:1px solid;margin: auto auto;position: absolute;left: 0;top: 0;right: 0;bottom: 0">
+ 						
+ 					</div>
+ 				</div>
+ 				
+ 			</div>
+ 		</div><br>
+
+
+ 		<div class="test" style="height: 200px;width: 200px;background-color: blue;color: yellow;position: relative;">
+ 			<div class="pp" style="position: absolute;left: 50%;top: 50%;">
+ 				<img src="images/siye.jpg" style="visibility: visible;" width="100px" class = "in-hide">
+ 				<img src="images/siye.jpg" style="position: absolute;left: -50%;top: -50%;" width="100px" class = "in-show">
+ 			</div>
+ 		</div>
+
+ 		<div class='box-model-test'>
+ 			background-clip的测试，默认是border-box
+ 		</div>
+ 		<div class='box-model-test' style="background-clip: padding-box;">
+ 			background-clip的测试，padding-box
+ 		</div>
+ 		<div class='box-model-test' style="background-clip: content-box;">
+ 			background-clip的测试，content-box
+ 		</div>
+
+ 		
+
+ 		
+ 		<br style="clear:both;">
+ 		<div style="width:300px;height:100px;border: 1px solid;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">
+ 				这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出
+ 		</div>
+ 		<div style="width:300px;height:100px;border: 1px solid;word-break:break-all;overflow:hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;line-height: 33px">
+ 				这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出,这是一段文字,使用baseline来实现,并且文字溢出
+ 		</div>
+ 		
+
+
+ 	</div>
+ 	<div id='algorithm-title'>基础算法</div>
+ 	<div id='algorithm'>
+ 		
+ 	</div>
+ 	<script type="text/javascript">
+ 		var w3cHtmlTile = document.getElementById('w3cschool-html-title');
+ 		w3cHtmlTile.addEventListener('click',function(){
+ 			var w3chtml = document.getElementById('w3cschool-html');
+ 			if (w3chtml.style.display == 'none')
+ 				w3chtml.style.display = 'block';
+ 			else
+ 				w3chtml.style.display = 'none';
+ 		})
+ 	</script>
+</body>
+</html>
