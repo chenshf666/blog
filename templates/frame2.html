@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		iframe{
+			width: 300px;
+			height: 300px;
+		}
+	</style>
+</head>
+<body>
+	<p>I am frame2</p>
+	<iframe src="../frame2-1" name="frame2-1"></iframe>
+	<iframe src="../frame2-2" name="frame2-2"></iframe>
+	<script type="text/javascript">
+		document.write('<p>window.name:'+window.name+'</p>')
+
+		var leftPos = window.screenX || window.screenLeft;
+		var topPos = window.screenY || window.screenTop;
+
+		document.write('<p>leftPos:',leftPos,'</p>');
+		document.write('<p>topPos:',topPos,'</p>');
+
+	</script>
+</body>
+</html>

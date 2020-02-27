@@ -25,7 +25,7 @@ SECRET_KEY = '$_q%r*winx3^*@k3q#1urm)6+g&_sa^xbni(+90)0+f+5y#nqt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['118.31.246.130','localhost']
+ALLOWED_HOSTS = ['118.31.246.130','localhost','192.168.1.2'];
 
 
 # Application definition
@@ -127,4 +127,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'static/images'),
+    os.path.join(BASE_DIR, 'static/css')
     ]

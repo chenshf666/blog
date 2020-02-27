@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+	<title>js基础</title>
+	<style type="text/css">
+		iframe{
+			width: 300px;
+			height: 300px;
+		}
+	</style>
+</head>
+<body>
+	<a href="../frame0">aaa</a><br>
+	<iframe src="../frame0" name="frame0"></iframe>
+	<iframe src="../frame1" name="frame1"></iframe>
+	<iframe src="../frame2" name="frame2"></iframe>
+	<button id='addTimeOut'>增加超时计时器</button>
+	<button id='deleteTimeOut'>去除超时计时器</button>
+	<button id='addInterval'>增加间歇执行</button>
+	<button id='delInterval'>去除间歇执行</button>
+	<button id='confirm'>confirm尝试</button>
+	<button onclick="readData.call(this);" data-age='666'>访问数据</button>
+	<input type="text" name="fff" id="inp" placeholder="自动聚焦">
+	<div id='include-two' style="background-color: #AAAAFF;min-height: 30px;min-width: 30px;" self-property='自定义属性' class="class1 class2">
+		我包含了两个div
+		<div style="background-color: #FAA;margin: 10px" id='first-two'>我是div1</div>
+		<div style="background-color: #AFA;margin: 10px;" id='second-two'>我是div2</div>
+	</div>
+	<div style="width: 300px;height: 300px;position: relative;background-color: red" id="outerbox">
+		<div style="width: 100px;height: 120px;padding: 20px;border: 10px solid black;background-color: white;position: absolute;margin: auto;left: 0;top:0;bottom: 0;right:0;" id='innerbox'></div>
+	</div>
+	<div id='yonghushuoming' style="height: 100px;overflow: scroll; padding: 20px; width: 100px;background-color: #FFA;">
+		<div id='neirong' style="height: 2000px;background-color: #AAF;">
+			
+		</div>
+	</div>
+
+	<div style="width: 100px;height: 100px;background-color:#AAF;" onclick='alert("\"啊，被点了\"");console.log(event.type,this);'>
+		有种"点我啊
+	</div>
+	<form>
+		<input type="text" name="username" onselect="alert('选你吗呢!')">
+		<input type="button" value="Echo username" onclick="alert(username.value)">
+	</form>
+
+	<div style="width: 300px;height: 300px;" id="editor">
+		
+	</div>
+
+	<ol style="max-width: 100px;min-height: 60px;background-color: #AFF;display: none;position: fixed;" id="menu">
+		<li><a href="https://www.baidu.com">百度</a></li>
+		<li><a href="https://bilibili.com">b站</a></li>
+	</ol>
+	<script type="text/javascript">
+		var age = 29; //默认归于window，但是不能使用delete删除
+		var name = 'outer';
+		function sayAge(){
+			alert(this.age);
+		}
+		document.write('<p>window.name:'+window.name+'</p>')
+		document.write('<p>window.frames[0].name   ',window.frames[0].name,'</p>');
+		document.write('<p>frames[0].name    ',frames[0].name,'</p>')
+		document.write('<p>top.frames[0].name    ',top.frames[0].name,'</p>');
+		document.write('<p>frames[frame0].name    ',frames['frame0'].name);
+
+		var leftPos = window.screenX || window.screenLeft;
+		var topPos = window.screenY || window.screenTop;
+
+		document.write('<p>leftPos:',leftPos,'</p>');
+		document.write('<p>topPos:',topPos,'</p>');
+
+		//var myWin = window.open('','','width=200px,height=200px');
+		//myWin.moveTo(100,200);
+		//myWin.resizeTo(100,100);
+		function lalert(){}
+		lalert(
+			[
+				window.innerHeight,
+				window.innerWidth, //浏览器视口大小，包含了滚动条大小，这个是视觉窗口大小
+				document.documentElement.clientHeight,
+				document.documentElement.clientWidth, //视口大小，不包含滚动条,在手机端，与viewport的大小相同
+				//说明viewport定义的是布局视口，决定实际布局的时候的大小，
+				document.body.clientWidth,
+				document.body.clientHeight, //是网页的实际宽高
+				window.outerHeight,
+				window.outerWidth, //浏览器窗口大小，在手机端是理想视口大小
+				//理想视口的值其实就是屏幕分辨率的值，它对应的像素叫做设备逻辑像素（device independent pixel, dip）。dip 和设备的物理像素无关，一个 dip 在任意像素密度的设备屏幕上都占据相同的空间。如果用户没有进行缩放，那么一个 CSS 像素就等于一个 dip。用device-width设置viewport可以使布局视口与理想视口的宽度一致：
+				window.devicePixelRatio
+			]
+		)
+
+		var add = document.getElementById('addTimeOut');
+		var del = document.getElementById('deleteTimeOut');
+		var timeoutId;
+		add.addEventListener('click',function(){
+			timeoutId = setTimeout(alert.bind(window,'time out!'),1000);
+		})
+		del.addEventListener('click',function(){
+			clearTimeout(timeoutId);
+		})
+
+		var add = document.getElementById('addInterval');
+		var del = document.getElementById('delInterval');
+		add.addEventListener('click',function(){
+			timeoutId = setInterval(console.log.bind(console,'GGGG'),1000);
+		})
+		del.addEventListener('click',function(){
+			clearInterval(timeoutId);
+		})
+
+
+		function $(id){
+			return document.getElementById(id);
+		}
+		function _(o,F){
+			o.addEventListener('click',F)
+		}
+		function _$(str,F){
+			var but = document.createElement('button');
+			but.innerHTML = str;
+			document.body.appendChild(but);
+			_(but,F);
+			return but;
+		}
+		function $$(str){
+			var p = document.createElement('p');
+			p.innerHTML = str;
+			document.body.appendChild(p);
+		}
+
+		var conf = $('confirm');
+		_(conf, function(){
+			var r = confirm('Are you sure?');
+			if(r)
+				alert("I'm glad to hear that you sure");
+			else
+				alert("Well,...take it easy");
+		})
+
+		_$('prompt',function(){
+			var r = prompt('请输入你的名字：',"chenshf");
+			alert(r);
+		});
+
+		_$('location.assign改变浏览器位置',()=>{
+			location.assign('../frame0');
+		}) //每次修改啊location相关属性，浏览器都会按照对应的URL重新加载
+		_$('location.replace可以使得后退不到原来的页面',()=>{
+			location.replace('../frame0');
+		}) 
+		_$('location.reload(true)从服务器重新加载',()=>{
+			location.reload(true);
+		}) 
+		_$('location.reload()可能从缓存重新加载',()=>{
+			location.reload();
+		}) 
+		_$('history.go()',()=>{
+			var r = prompt('history.go:',"1");
+			history.go(Number(r));
+		}) 
+
+		var someNode = $('addTimeOut');
+		$$('node.nodeName获取标签名字 '+someNode.nodeName);
+
+		$$( 'node.childNodes可以返回nodeList对象，但是此对象并非数组，所以要先转换成数组'+(Array.prototype.slice.call(document.body.childNodes,0)).slice(0,3) );
+		$$(document.body.parentNode);
+		$$(document.body.previousSibling, document.body.nextSibling);
+		$$(document.body.firstChild + document.body.lastChild);
+		var newNode = _$('在timeout按钮前插入',function(){});
+		document.body.insertBefore(newNode, someNode);
+		var replaceNode = _$('点击将timeout前的按钮替换掉',function(){
+			document.body.replaceChild(_$('替换成功',()=>0), newNode);
+		});
+
+		var replaceNode = _$('点击将timeout前的按钮删除掉',function(){
+			document.body.removeChild(newNode);
+		});
+
+		var two = $('include-two');
+		$$('自定义特性通过.self-property无法访问，得使用getAttribute()才行。同样，设置也要通过setAttribute()'+two['self-property']+two.getAttribute('self-property'));
+		_$('深复制div到body',function(){
+			document.body.appendChild(two.cloneNode(true));
+		})
+		_$('潜复制div',function(){
+			document.body.appendChild(two.cloneNode(false));
+		})
+
+		//文本节点是便签内的文字
+		//比如<div> </div>内有空格，就有一个文本节点 <div>Hellow<div></div>world</div>就有两个文本节点
+		var text = document.createTextNode('<strong>创建文本节点</strong>');
+		two.appendChild(text);
+		two.appendChild(text);
+		console.log(two.childNodes);
+		//使用normalize可以去除空文本节点以及合并响铃文本节点
+		two.normalize();
+		console.log(two.childNodes);
+
+
+		//NodeList(childNodes) HTMLCollection(getElementsByTagName) NamedNodeMap(attributes) 都会随网页变化而变化，并非访问后就停止了
+		var t = document.querySelector('[id*=include]');
+		console.log(t);
+		//只会返回第一个元素哦
+		//querySelectorAll
+
+		var test = document.getElementsByClassName('class2');
+		console.log(test);
+		var test = document.getElementsByClassName('class2 class1');
+		console.log(test);
+
+
+		//可以使用div.classList访问class列表
+		console.log(two.classList);
+
+		var inp = $('inp');
+		
+
+		//可以通过dataset访问data-的自定义属性
+		function readData(){
+			this.innerHTML = this.dataset.age;
+		}
+
+		two.insertAdjacentHTML("beforebegin","<br><button>beforebegin</button>");
+		two.insertAdjacentHTML("afterbegin","<button>afterbegin</button>");
+		two.insertAdjacentHTML("beforeend","<button>beforeend</button>");
+		two.insertAdjacentHTML("afterend","<button>afterend</button>");
+
+		var button = document.createElement('button');
+		button.innerHTML = 'scrollToHere';
+		document.body.appendChild(button);
+
+		
+
+		window.onload = function(){
+			button.scrollIntoView();
+			inp.focus();
+
+		}
+
+		//忽略文本节点
+		console.log([two.childElementCount, two.firstElementChild, two.lastElementChild, two.firstElementChild.nextElementSibling]);
+		console.log([two.children[0], two.children[1]]);
+
+
+		var ftwo = $('first-two');
+		var stwo = $('second-two');
+		console.log(two.contains(ftwo),two.contains(stwo));
+		console.log(get_position(two,ftwo), get_position(ftwo,stwo),get_position(two,document.body));
+		function get_position(ori, des){
+			var r = ori.compareDocumentPosition(des);
+			var result = new Array();
+			if(!!(r&1)){
+				result.push('无关');
+			}if(!!(r&2)){
+				result.push( 'des在ori之前');
+			}if(!!(r&4)){
+				result.push( 'des在ori之后');
+			}if(!!(r&8)){
+				result.push( 'des包含ori');
+			}if(!!(r&16)){
+				result.push( 'ori包含des');
+			}
+			return result;
+		}
+
+		var fr0 = window.frames[0];
+		var fr0_doc = fr0.document;
+		
+		_$('输出frame0的body',function(){
+			console.log(fr0.document.body);
+		})
+
+		_$('设置two背景色为红色',()=>{
+			two.style.setProperty('background-color','red');
+		})
+
+		_$('去除two背景色',()=>{
+			two.style.removeProperty('background-color');
+		})
+
+		var fr0 = document.getElementsByTagName('iframe')[0];
+		_$('通过contentDocument和contentWindow输出frame0的文档，顺便getComputedStyle',function(){
+			console.log(fr0.contentDocument, fr0.contentWindow, document.defaultView.getComputedStyle(fr0).height, fr0.currentStyle);
+
+		});
+
+		var innerbox = $('innerbox');
+		var outerbox = $('outerbox');
+		console.log(innerbox.offsetHeight, innerbox.offsetWidth, innerbox.offsetTop, innerbox.offsetLeft, innerbox.offsetParent);
+
+		var neirong = $('neirong');
+		var yonghushuoming = $('yonghushuoming');
+		yonghushuoming.addEventListener('scroll',(function(){
+			if(yonghushuoming.scrollTop + yonghushuoming.clientHeight >= yonghushuoming.scrollHeight){
+				neirong.style.backgroundColor = '#FAA';
+			}else{
+				neirong.style.backgroundColor = '#AAF';
+			}
+		}));
+
+
+		_$('遍历body',function(){
+			var filter = function(node){
+				return NodeFilter.FILTER_ACCEPT; //SKIP
+			}
+			//也可以使用createTreeWalker遍历
+			var iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_ELEMENT, filter, false);
+			var node = iterator.nextNode();
+			while(node!=null){
+				console.log(node.tagName);
+				node = iterator.nextNode();
+			}
+		})
+
+		var div1 = document.createElement('div');
+		var div2 = document.createElement('div');
+		var div3 = document.createElement('div');
+
+		div1.id = 'div1';
+		div2.id = 'div2';
+		div3.id = 'div3';
+		div1.style.cssText = 'width:100px;height:100px;background-color:blue;border: 1px solid black;';
+		div2.style.cssText = 'width:80px;height:80px;background-color:#AAF;margin:10px;border: 1px solid black;';
+		div3.style.cssText = 'width:60px;height:60px;background-color:#99A;margin:10px;border: 1px solid black;';
+		div2.appendChild(div3);
+		div1.appendChild(div2);
+
+		function divclick(event){
+			var phase = event.eventPhase;
+			var r;
+			if(phase == 1)
+				r = '捕获阶段';
+			else if(phase == 2)
+				r = '处于目标';
+			else
+				r = '冒泡阶段';
+			console.log(this.id,r,event.type);
+
+			if(this.id == 'div2'){
+				event.stopPropagation();
+				console.log('停止进一步冒泡或者捕获')
+			}
+		}
+
+		div1.addEventListener('click',divclick,true);
+		div2.addEventListener('click',divclick,true);
+		div3.addEventListener('click',divclick,true); //捕获阶段
+		div1.addEventListener('click',divclick,false);
+		div2.addEventListener('click',divclick,false);
+		div3.addEventListener('click',divclick,false);
+		document.body.appendChild(div1);
+		/*var div2click = ()=>{
+			console.log('I am div3;');
+		}
+		div2.attachEvent('click',div2click);
+		_$('移除div2的attachEvent', function(){
+			div2.detachEvent('click', div2click);
+		})*/
+
+		var button = document.createElement('button');
+		button.innerHTML = '点击查看事件函数的this指向';
+		button.onclick = function(){
+			console.log(this);
+		}
+
+		document.body.appendChild(button);
+
+
+		var xuanzhuan = document.createElement('div');
+		xuanzhuan.style.cssText = 'width:100px;height:62px;background-color:blue;transtion: transform 2s;';
+
+		function xuan(){
+			var times = 0;
+			var deg = 0;
+			var inter;
+			return function(){
+				if(times == 0){
+					times += 1;
+					inter = setInterval(function(){
+						deg += 10;
+						xuanzhuan.style.transform = 'rotate('+deg+'deg)';
+					},100);
+				}else{
+					times = 0;
+					deg = 0;
+					clearInterval(inter);
+					xuanzhuan.style.transform = 'rotate(0deg)';
+				}
+			}
+		}
+		xuanzhuan.onclick = xuan();
+		document.body.appendChild(xuanzhuan);
+
+
+		//可以使用preventDefault来阻止链接跳转
+		var a = document.createElement('a');
+		a.href = 'https://www.baidu.com';
+		a.title = '随你点，爷不跳转';
+		a.innerHTML = '百度';
+
+		a.onclick = function(){
+			event.preventDefault();
+		}
+		document.body.appendChild(a);
+		//this的指向问题，词法作用域是什么
+
+		window.onunload = function(){
+			alert('求求你不要离开我');
+		}
+
+		var img = new Image();
+		img.src = '/static/images/siye.jpg';
+		img.width = '100';
+		img.height = '100';
+		img.onerror = function(){
+			console.log('图片不存在');
+		}
+
+		img.onload = function(){
+			console.log('图片加载完成');
+			document.body.appendChild(img);
+		}
+
+		//window.onresize = function(){
+		//	alert('窗口大小变化');
+		//}
+
+		function randint(a,b){
+			var rand = Math.random(a,b);
+			return Math.floor(rand*(b-a) + a);
+		}
+
+		
+
+		var hengtiao = document.createElement('div');
+		var shutiao = document.createElement('div');
+		hengtiao.style.cssText = 'position:fixed;height: 1px;background-color: black;z-index:-1;left: 0;';
+		shutiao.style.cssText = 'position:fixed;width: 1px;background-color: black;z-index:-1;top:0;';
+
+
+		document.body.appendChild(hengtiao);
+		document.body.appendChild(shutiao);
+
+
+		function mouseLine(event){
+			hengtiao.style.width = event.clientX + 'px';
+			hengtiao.style.top = event.clientY + 'px';
+
+			shutiao.style.left = event.clientX + 'px';
+			shutiao.style.height = event.clientY + 'px';
+
+			console.log(event.pageX, event.pageY, event.screenX, event.screenY);
+		}
+
+		_$('开启鼠标线',function(){document.body.onmousemove=mouseLine;})
+		_$('关闭鼠标线',function(){document.body.onmousemove=null;hengtiao.style.width='0';shutiao.style.height='0';})
+
+		_$('按不同的键点我哟',function(event){
+			var keys = new Array();
+			if(event.shiftKey)
+				keys.push('shift');
+			if(event.ctrlKey)
+				keys.push('ctrl');
+			if(event.altKey)
+				keys.push('alt');
+			if(event.metaKey)
+				keys.push('meta');
+			alert(keys.join(','));
+		});
+
+
+		var div1 = document.createElement('div');
+		var div2 = document.createElement('div');
+		div1.style.cssText ='width:100px;height:100px;border:1px solid black;padding: 10px;';
+		div2.style.cssText ='width:80px;height:80px;border:1px solid black;font-size:10px;';
+		div2.innerText = 'mouseover和mouseout在鼠标移动向子元素的时候都会触发，但是enter和out则不会';
+		div1.appendChild(div2);
+
+		function mouse(){
+			console.log(event.type)
+		}
+
+		div1.onmouseover = div1.onmouseout = div1.onmouseenter = div1.onmouseleave = mouse;
+		document.body.appendChild(div1);
+		//var result = new Array(6).fill(0);
+//
+		//for(var i = 0; i <= 10000; i++){
+		//	result[randint(1,5)]++;
+		//}
+
+		//console.log(result);
+
+		var editor = $('editor');
+		function whenEnter(event){
+			//console.log(event.keyCode);
+			if(event.keyCode == 13){
+				event.preventDefault();
+				editor.appendChild(document.createElement('br'));
+				addSpan();
+			}
+		}
+
+		function composition(event){
+			console.log(event.data);
+		}
+		function addSpan(event){
+			var span = document.createElement('span');
+			span.contentEditable = 'true';
+			span.onkeydown = whenEnter;
+			//span.addEventListener('compositionstart',composition); //没有oncomposition属性哟
+			//span.addEventListener('compositionend',composition);
+			span.addEventListener('compositionupdate',composition);
+			editor.appendChild(span);
+			span.focus();
+		}
+
+
+
+		editor.addEventListener('click',addSpan);
+
+		document.body.addEventListener('contextmenu',function(event){
+			event.preventDefault();
+			var menu = $('menu');
+			menu.style.top = event.clientY + 'px';
+			menu.style.left = event.clientX + 'px';
+			menu.style.display = 'block';
+		})
+
+		//要和浏览器有交互才会触发
+		// window.addEventListener('beforeunload',function(event){
+	//		var message = '网站不会保存你的更改，你真的要离开吗？';
+	//		event.returnValue = message;
+	//		return message;
+	//	})
+
+		//window.addEventListener('load',function(){
+		//	alert('load');
+		//})
+
+		//window.addEventListener('pageshow',function(){
+		//	alert('pageshow persisted?'+event.persisted);
+		//})
+
+		//window.addEventListener('pagehid',function(){
+	//		alert('pagehide');
+	//	})
+
+		window.addEventListener('hashchange',function(event){
+			console.log('Old url:'+event.oldURL + ' New URL:'+ event.newURL, location.hash);
+
+		})
+
+		window.addEventListener('orientationchange',function(){
+			alert('orientation change,'+window.orientation);
+		})
+
+
+		var div = document.createElement('div');
+		document.body.appendChild(div);
+		window.addEventListener('MozOrientation',function(event){
+			div.innerHTML = event.x + ',' + event.y + ',' + event.z + '<br>';
+		})
+
+		var div2 = document.createElement('div');
+		document.body.appendChild(div2);
+		window.addEventListener('deviceorientation',function(event){
+			div2.innerHTML = 'deviceorientation:' + '<br>' + (event.alpha||0).toFixed(2) + '<br>' + (event.beta||0).toFixed(2) + '<br>' + (event.gamma||0).toFixed(2) + '<br>';
+		})
+
+
+		String.prototype.format = function () {
+		    var values = arguments;
+		    return this.replace(/\{(\d+)\}/g, function (match, index) {
+		    	console.log(match,index);
+		        if (values.length > index-1) {
+		            return values[index-1];
+		        } else {
+		            return "";
+		        }
+		    });
+		};
+
+
+		//var div3 = document.createElement('div');
+		//document.body.appendChild(div3);
+		//window.addEventListener('devicemotion',function(event){
+		//	div3.innerHTML = 'devicemotion: rotationRate {1},{2},{3}'.format((event.rotationRate.alpha.toFixed(2)));
+		//})
+
+
+		//每个函数就是一个对象，对象越多，内存占用越大，而click事件是会冒泡的，因此我们可以在多个子元素的父元素设置
+		//单独一个click来处理不同的点击，通过target来判断点击的具体对象是哪一个，称之为事件委托
+		//如果使用innerHTML删除节点，可能导致节点的函数事件没法被垃圾回收，因此要提前设置为null
+
+		document.body.addEventListener('myevent',function(event){
+			alert(event.target.id + ':' + event.detail);
+		})
+
+		_$('触发自定义事件',function(){
+			var event = document.createEvent('CustomEvent');
+			event.initCustomEvent("myevent",true,true, "i am a myevent");
+			two.dispatchEvent(event);
+		})
+	</script>
+</body>
+</html>

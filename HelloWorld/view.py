@@ -18,6 +18,12 @@ def hello(request):
 def home(request):
 	return render(request,'home.html',{})
 
+def htmlcss(request):
+    return render(request,'htmlcss.html',{})
+
+def js(request):
+    return render(request,'js.html',{})
+
 def blog_submit(request):
     if request.method == 'POST':
         myFile = request.FILES.get("f", None)
@@ -29,3 +35,7 @@ def blog_submit(request):
                 destination.write(chunk)
             destination.close()
     return render(request,'home.html',{})
+
+
+def frame(request):
+    return render(request,request.path_info[1:]+'.html',{})
