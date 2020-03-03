@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>拖拽事件</title>
+</head>
+<body>
+	<div id="div1">
+		<p draggable="true" id="d">这是一段可以拖拽的话</p>
+	</div>
+	<div id="div2"></div>
+	<script type="text/javascript">
+		function $(id){
+			return document.getElementById(id);
+		}
+
+		var div1 = $('div1');
+		var div2 = $('div2');
+		var p = $('d');
+		div1.style.cssText = div2.style.cssText = "border:1px solid black;width:200px;height:100px;";
+		function drag(event){
+			event.preventDefault();
+		}
+		p.addEventListener('dragstart',function(event){
+			event.dataTransfer.setData('text',this.id);
+			event.dataTransfer.effectAllowed = 'true';
+		})
+		div2.addEventListener('dragover',drag);
+		div2.addEventListener('dragenter',function(event){
+			event.dataTransfer.dropEffect = "none";
+		});
+		div2.addEventListener('drop', function(event){
+			var id = event.dataTransfer.getData('text');
+			var thing = $(id);
+			this.appendChild(thing);
+		});
+	</script>
+</body>
+</html>

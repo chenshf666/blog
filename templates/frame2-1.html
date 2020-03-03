@@ -5,10 +5,18 @@
 </head>
 <body>
 	<p>I am frame2-1</p>
+	接收消息的域:<br><input type="text" id="msgorigin"><br>
+	接收的消息:<br>
+	<textarea id="getmsg"></textarea><br>
 	<script type="text/javascript">
 		document.write('<p>window.name:'+window.name+'</p>')
-		document.write('<p>top.name:'+top.name+'</p>')
-		document.write('<p>parent.name:'+parent.name+'</p>')
+		//document.write('<p>top.name:'+top.name+'</p>')
+		//document.write('<p>parent.name:'+parent.name+'</p>')
+		window.addEventListener('message',function(event){
+			document.getElementById('getmsg').value = event.data;
+			document.getElementById('msgorigin').value = event.origin;
+			event.source.postMessage('从'+event.origin+'收到消息:'+event.data,event.origin);
+		})
 	</script>
 </body>
 </html>

@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TestModel', # 这是啥
+    'dwebsocket',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,8 +51,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'HelloWorld.middle.crossXHR',
+    #'dwebsocket.middleware.WebSocketMiddleware'  # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
 ]
 
+#WEBSOCKET_ACCEPT_ALL=True   # 可以允许每一个单独的视图实用websockets
 ROOT_URLCONF = 'HelloWorld.urls'
 
 TEMPLATES = [
@@ -127,5 +133,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'static/images'),
-    os.path.join(BASE_DIR, 'static/css')
+    os.path.join(BASE_DIR, 'static/css'),
+    os.path.join(BASE_DIR, 'static/js')
     ]

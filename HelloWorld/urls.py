@@ -25,11 +25,16 @@ urlpatterns = [
     path('htmlcss/',view.htmlcss),
     re_path('^frame',view.frame),
     path('js/',view.js),
+    re_path('^jsonp',view.jsonp),
+    path('form/',view.form),
+    re_path('^new-',view.all),
+    path('xdm/',view.xdm),
+    path('socket/',view.socket),
     path('blog-submit',view.blog_submit),
     path('hello/', view.hello),
     path('testdb/',testdb.testdb),
     url(r'^search-form$', search.search_form),
-    url(r'^search$', search.search),
+    url(r'^search$', view.search),
     url(r'^search-post$', search2.search_post),
     url(r'^admin/', admin.site.urls)
 ]

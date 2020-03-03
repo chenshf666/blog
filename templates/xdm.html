@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>跨文档消息传送
+	</title>
+</head>
+<body>
+	<iframe src="http://192.168.1.2:8000/frame2-1" name='xdsframe'></iframe><br>
+	<input type="text" id="msg">
+	<button id="postm">发送消息到框架</button><br>
+	接收消息的域:<br><input type="text" id="msgorigin"><br>
+	接收的消息:<br>
+	<textarea id="getmsg"></textarea><br>
+	<script type="text/javascript">
+		window.addEventListener('message',function(event){
+			document.getElementById('getmsg').value = event.data;
+			document.getElementById('msgorigin').value = event.origin;
+		})
+		var postm = document.getElementById('postm');
+		postm.onclick = function(event){
+			var fr = window.frames['xdsframe'];
+			// 第二个参数需要是对方的域
+			fr.postMessage(document.getElementById('msg').value,'http://192.168.1.2:8000/');
+		}
+	</script>
+</body>
+</html>

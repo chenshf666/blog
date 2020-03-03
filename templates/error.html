@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>json和ajax</title>
+</head>
+<body>
+	<form id="myform" action="/blog-submit">
+		{% csrf_token %}
+		<input type="file" name="f" accept="image/*" id="img">
+	</form>
+	<button id="send">发送！</button>
+	<button id="recv">接受图片！</button>
+	<br>ready state:<input type="text" id="rdstate">
+	<br>下载进度:<progress value="0" max="100" id="jindu"></progress>
+	<progress>
+	<script type="text/javascript">
+		var person = {
+			name:"cehnshf",
+			age:17,
+			school:['qianmei','longiqao','chengzhong','zhongshandaxue']
+		}
+
+		var people = {
+			toJSON: function(){
+				return person;
+			}
+		}
+		var json = JSON.stringify(people, function(key, value){
+			switch(key){
+				case "name":
+					return "huangou";
+
+				case "school":
+					return value.join('|');
+
+				default:
+					return value;
+			}
+		},4);
+		var str = JSON.parse(json);
+		console.log(json, str);
+
+
+		var xhr = new XMLHttpRequest();
+		xhr.open('get','/search?q=哈 哈哈',false); //第三个参数决定是否异步发送,false为同步
+		xhr.setRequestHeader("MyHeader","MyValue");
+
+		xhr.send();
+		console.log(xhr);
+		var myheader = xhr.getResponseHeader("MyHeader");
+		var all = xhr.getAllResponseHeaders();
+		console.log(all);
+
+		var send = document.getElementById('send');
+		var form = document.getElementById('myform');
+		var file = document.getElementById('img');
+
+		//跨域post受到django的crsf token限制，导致不可能成功(如果使用了另一个域的token，cookie就不一样)
+		send.onclick = function(){
+			xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(event){
+				document.getElementById('rdstate').value = xhr.readyState;
+			}
+			xhr.open('post','http://192.168.1.2:8000/blog-submit',true);
+			xhr.timeout = 1000; //timeout之后行为没有被终止，注意
+			xhr.ontimeout = function(event){
+				alert('Send timeout!');
+			}
+			var formData = new FormData(form);
+			//console.log(formData.get('f'));
+			xhr.send(formData);
+			//xhr.abort();
+		}
+
+
+		//为了使得下面的跨域请求成立，在django里加了中间件，将Access-Control-Allow-Origin设为*
+		recv.onclick = function(){
+			xhr = new XMLHttpRequest();
+			xhr.onprogress = function(event){
+				
+				if(event.lengthComputable){
+					//console.log(event.loaded/event.total);
+					document.getElementById('jindu').value = Math.round(event.loaded*100/event.total);
+				}
+			}
+			xhr.onreadystatechange = function(event){
+				if(xhr.readyState == 4)
+					console.log(xhr);
+			}
+			xhr.open('get','http://192.168.1.2:8000/htmlcss/',true);
+			//var formData = new FormData(form);
+			//console.log(formData.get('f'));
+			xhr.send(null);
+
+		}
+
+
+		// 利用图像ping发出get请求,但是chrome会对此进行CORB
+		var img = new Image();
+		img.onload = function(){
+			console.log("I have send the request");
+		}
+		img.src = "http://192.168.1.2:8000/"
+
+
+		//jsonp 说白了是利用script进行web端跨域传送数据而不需要更改服务器端的一种方式
+		//不设置Access-Control-Allow-Origin也可以运作
+		function callme(data){
+			alert('I receive data from different domain!!!it is :' + data.name + data.age);
+		}
+		var script = document.createElement('script');
+		script.src = "http://192.168.1.2:8000/jsonp?callback=callme";
+		document.body.appendChild(script);
+
+
+		//comet长轮询和短轮询(多个xhr) 和http流(1个xhr) 可惜django做不到，所以最好使用短轮询
+
+		//sse server sent event
+
+		//websocket 可以跨域
+		var socket = new WebSocket('ws://192.168.1.2:8001/socket/');
+		var message = { name: 'chenshf', age:'18'};
+		socket.onopen = ()=>{
+			socket.send(JSON.stringify(message));
+		}
+		socket.onmessage = function(event){
+			var data = event.data;
+			console.log(data);
+			socket.close();
+		}
+		//socket.close();
+
+
+		//函数柯里化
+		function curry(fn, context){
+			var args = Array.prototype.slice.call(arguments, 2);
+			return function(){
+				var innerArgs = Array.prototype.slice.call(arguments);
+				var allArgs = args.concat(innerArgs);
+				return fn.apply(context, allArgs);
+			}
+		}
+		function add(a,b){
+			return a+b;
+		}
+
+		var curriedAdd = curry(add, null, 1);
+		console.log(curriedAdd(2));
+		curriedAdd = curry(add, null, 1,3);
+		console.log(curriedAdd());
+		curriedAdd = curry(add, null);
+		console.log(curriedAdd(2,4));
+
+		//不可扩展对象
+		var dog = {cat:'enemy'};
+		Object.preventExtensions(dog);
+		dog.age = 1;
+		console.log(dog.age, Object.isExtensible(dog));
+
+		//密封对象
+		//不可扩展 且已有成员[[configurable]]被设置为false，即不能删除属性和方法
+		var cat = {'name':'mimi'};
+		Object.seal(cat);
+		delete cat.name;
+		console.log(cat.name, Object.isSealed(cat), Object.isExtensible(cat));
+
+		//冻结对象
+		//不可扩展，被密封，writable被设置为false
+		var ma = {name:'meme',age:11};
+		Object.freeze(ma);
+		ma.pig = 'one';
+		delete ma.name;
+		ma.name = 'fufu';
+		console.log(ma, Object.isFrozen(ma));
+
+
+		var money = 0;
+		var months = 0;
+		var salary = 5000;
+		var yearGet = 2.165/100;
+		while(money < 1000000){
+			money *= (1 + yearGet/365)**30;
+			money += salary;
+			months++;
+		}
+		console.log(months, money);
+		</script>
+</body>
+</html>

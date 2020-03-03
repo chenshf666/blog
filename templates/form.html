@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>表单</title>
+	<script type="text/javascript" src="/static/js/form.js"></script>
+	<style type="text/css">
+		div:empty:before{
+			content: "可以编辑的div哟哟哟";
+			color:#AAA;
+		}
+	</style>
+</head>
+<body>
+	<form id="myform">
+		<textarea name="text" id="textbox"></textarea><br>
+		<p>输入到最大长度后自动跳转到下一个输入框</p>
+		<input type="text" name="phone1" maxlength="3" size="3">
+		<input type="text" name="phone2" maxlength="3" size="3">
+		<input type="text" name="phone3" maxlength="3" size="3">
+		<ul>
+			<li><input type="radio" name="color" value="red" required="required">Red</li>
+			<li><input type="radio" name="color" value="green" required="required">Green</li>
+			<li><input type="radio" name="color" value="blue" required="required">Blue</li>
+		</ul>
+		<select name="fanju">
+			<option>电锯人</option>
+			<option>迷宫饭</option>
+			<option>骑乘之王</option>
+			<option value="五等分">花嫁</option>
+			<option value="">伪恋</option>
+		</select>
+		<input type="text" name="username" placeholder="用户名" size="5" maxlength="10"><br>
+		<input type="password" name="pwd" placeholder="密码" id="password"><br>
+		<button type="reset">重置</button>
+		<button type="submit" name="submit-btn">登录</button>
+	</form>
+
+	<form id="myform2">
+		<input type="email" name="email" required="required" value="qq@com"><br>
+		<input type="url" name="url" required="required" value="https://www.baidu.com"><br>
+		<input type="number" name="num" required="required" value="1"><br>
+		<input type="text" pattern="\d+" name="regexp" placeholder="正则表达式" required="required"><br>
+		<input type="submit" name="submit" value="提交">
+	</form>
+
+	<h5>富文本编辑器</h5>
+	<div id="buttons">
+		<button id="backcolor">调整文字背景颜色</button>
+		<button id="bold">加粗</button>
+		<input type="range" id="fontsize" min="1" max="7" value="3" onblur="value=3;">
+	</div>
+	<iframe src="/frame2-2" name="richedit"></iframe>
+	<div id='richedit2' contenteditable="true"></div>
+	<form id="richeditform">
+		<textarea name="comments"></textarea>
+		<button type="submit">上传文档</button>
+	</form>
+</body>
+</html>
