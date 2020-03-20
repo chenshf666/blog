@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		判断垃圾回收，顺便研究堆和栈
+	</title>
+	<style type="text/css">
+		#div1, #div2{
+			width: 100px;
+			height: 100px;
+			border: 1px solid red;
+		}
+	</style>
+</head>
+<body>
+	<div id="div1">
+		div1
+		<div id="div2">
+			div2
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		window.onload=function(){
+			var div1 = document.getElementById('div1');
+			var div2 = document.getElementById('div2');
+
+			function get(){
+				var a = new Array(5*1024*1024);
+				return function(){
+					a;
+				}
+			}
+
+			div2.addEventListener('click',get(),false);
+			//div1.innerHTML = "";能被释放
+			//div1.removeChild(div2);能被释放
+			//div1 = null;
+			//div2 = null;
+		}
+	</script>
+</body>
+</html>

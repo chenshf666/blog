@@ -20,6 +20,8 @@ from django.conf.urls import url
 from . import view
 from . import testdb,search,search2
 
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+
 urlpatterns = [
     path('',view.home),
     path('htmlcss/',view.htmlcss),
@@ -28,11 +30,20 @@ urlpatterns = [
     re_path('^jsonp',view.jsonp),
     path('form/',view.form),
     re_path('^new-',view.all),
+    
+    
+    path('register', view.register),
+    path('login', view.login),
+    path('validate', view.validate),
+    path('add_blog', view.add_blog),
+    path('get_blogs', view.get_blogs),
+    
     path('xdm/',view.xdm),
     path('socket/',view.socket),
     path('blog-submit',view.blog_submit),
     path('hello/', view.hello),
     path('testdb/',testdb.testdb),
+    
     url(r'^search-form$', search.search_form),
     url(r'^search$', view.search),
     url(r'^search-post$', search2.search_post),

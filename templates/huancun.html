@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>html缓存机制</title>
+	<link rel="stylesheet" type="text/css" href="/static/huancun.css">
+	<META HTTP-EQUIV="cache-control" CONTENT="max-age=7200">
+</head>
+<body>
+	<div></div>
+	<script type="text/javascript">
+		localStorage.sitename = '你把几万比重皮放到';
+		console.log(localStorage.sitename);
+		localStorage.setItem('nihao','buhao');
+		console.log(localStorage.getItem('nihao'));
+		localStorage.removeItem('nihao');
+		console.log(localStorage);
+		console.log(localStorage.key(0));
+		localStorage.clear();
+		console.log(localStorage);
+		localStorage.setItem('你爸爸','我');
+
+		sessionStorage.setItem('我去你妈','你去他妈');//关闭标签页就没有了
+
+
+	</script>
+</body>
+</html>

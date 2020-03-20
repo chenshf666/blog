@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import os
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.clickjacking import xframe_options_deny
 from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.views.decorators.cache import cache_control
+from TestModel.models import User, Blog
+
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,6 +26,7 @@ def home(request):
     print(ren['Content-Type'])
     return ren
 
+@cache_control(must_revalidate=False, max_age=3600)
 def htmlcss(request):
     return render(request,'htmlcss.html',{})
 
@@ -46,7 +51,16 @@ def frame(request):
     return render(request,request.path_info[1:]+'.html',{})
 
 def all(request):
-    return render(request,request.path_info[5:]+'.html',{})
+    name = request.path_info[5:];
+    if name == 'xss-search':
+        print(request.POST['search'])
+        return render(request, name+'.html',{'content':request.POST['search']})
+    if name == 'cookie':
+        rep = render(request, name+'.html',{})
+        rep.set_cookie('sid','123456',max_age=100,path='/')
+        rep.set_signed_cookie('saltid','1111',salt='iamsalt')
+        return rep
+    return render(request,name+'.html',{})
 
 def form(request):
     return render(request,'form.html',{});
@@ -93,3 +107,81 @@ def socket(request):
 # WebSocket.count_messages（）返回消息的数量
 # WebSocket.has_messages（）返回是否有新的消息过来
 # WebSocket.send（message）像客户端发送消息，message为byte类型
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
+import json
+
+@csrf_exempt
+def register(request):
+    post_content = json.loads(request.body, encoding='utf-8')
+    username = post_content['username']
+    password = post_content['password']
+    if User.objects.filter(username=username):
+        return HttpResponse('已经被注册')
+    else:
+      try:
+          user = User(id=User.objects.count(), username=username, password=password)
+          user.save()
+          return HttpResponse('注册成功')
+      except:
+          return HttpResponse('异常');
+
+import time
+import jwt
+
+secret_key = 'hewuifoiwhfijsiodhfijiowioejriioweuroiwueio'
+
+@csrf_exempt
+def login(request):
+    post_content = json.loads(request.body, encoding='utf-8')
+    username = post_content['username']
+    password = post_content['password']
+    if User.objects.filter(username=username,password=password):
+        payload = {
+          'username':username,
+          'exp':int(time.time()+3600) # 有效期3600秒
+        }
+        encoded = jwt.encode(payload,secret_key,algorithm='HS256')
+        token = str(encoded,encoding="utf-8")
+        return HttpResponse(json.dumps({'status':0,'msg':'登录成功','token':token}), content_type="application/json")
+    else:
+        return HttpResponse(json.dumps({'status':1,'msg':'用户名不存在或者密码错误'}), content_type="application/json")
+
+@csrf_exempt
+def validate(request):
+    post_content = json.loads(request.body, encoding='utf-8')
+    token = post_content['token']
+    try:
+        decoded =jwt.decode(token,secret_key,algorithm='HS256')
+    except:
+        return HttpResponse(json.dumps({'status':1}))
+    username = decoded['username']
+    return HttpResponse(json.dumps({'status':0, 'username':username}))
+    
+
+@csrf_exempt
+def add_blog(request):
+    post_content = json.loads(request.body, encoding='utf-8')
+    token = post_content['token']
+    content = post_content['content']
+    title = post_content['title']
+
+    try:
+        decoded = jwt.decode(token, secret_key, algorithms='HS256')
+    except:
+        return HttpResponse(json.dumps({'status':1, 'msg':'身份验证失败，请重新登录'}))
+
+    author = decoded['username']
+    try:
+        blog = Blog(author=author, content=content, title=title)
+        blog.save()
+        return HttpResponse(json.dumps({'status':0, 'msg':'发布成功'}))
+    except:
+        return HttpResponse(json.dumps({'status':2, 'msg':'发生异常'}))
+
+
+from django.core import serializers
+def get_blogs(request):
+    blogs = Blog.objects.all()
+    json_data = serializers.serialize('json', blogs)
+    #json_data = json.loads(json_data)
+    return HttpResponse(json_data)

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>跨站脚本攻击</title>
+</head>
+<body>
+	<form action="/new-xss-search" method="post">
+		{% csrf_token %}
+		<input type="text" name="search" placeholder="请输入您要搜索的内容">
+		<input type="submit">
+	</form>
+	<p>优秀的chrome并不会被上面的代码攻击，无论是一个script或者内置href=javascript:xxx的代码<span style="color:red">new-xss-search:9 The XSS Auditor refused to execute a script in 'http://localhost:8000/new-xss-search' because its source code was found within the request. The auditor was enabled as the server did not send an 'X-XSS-Protection' header.</span></p>
+	
+</body>
+</html>

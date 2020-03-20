@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery</title>
+	<style type="text/css">
+		.class1{
+			background-color: blue;
+		}
+		.class2{
+			font-size: 20px;
+		}
+		.class3{
+			border: 3px dotted black;
+		}
+	</style>
+	<script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+	<p>我草你妈</p>
+	<p>我丢你妈</p>
+	<p class="class2 class3">我人浮点数</p>
+	<button id="first">无中生有</button>
+	<div></div>
+	<div></div>
+	<div></div>
+	<button id="second">淡出淡入</button>
+	<button id="third">滑动</button>
+	<button id="fourth">动画</button>
+	<div class="class1 class2">呵呵</div>
+	<div class="class1 class2" id="hehe">呵2呵</div>
+	<input type="text" name="wenben">
+	<button id="fifth">输出文本框内容</button>
+	<a href="www.baidu.com"></a>
+	<a href="www.alibaba.com"></a>
+	<script type="text/javascript">
+		$(function(){
+			
+			$('#first').bind('contextmenu',function(){
+				return false;
+			});
+			$('#first').click(
+				function(){
+					$('p').toggle('slow');
+				}
+			)
+
+			$('#hehe').click(function(){
+				console.log('I am hehe1');
+			});$('#hehe').click(function(){
+				console.log('I am hehe2');
+			})
+
+			$('p').mousedown(function(event){
+				this.innerHTML = '按下鼠标';
+			});
+
+			$('p').mouseup(function(event){
+				this.innerHTML = '松开鼠标';
+			});
+			$('#hehe')[0].innerHTML = '我是呵呵呵';
+
+			$('#hehe').hover(
+				function(){
+					$(this).text('不要这样啦');
+				},
+				function(){
+					$(this).html('有种来摸我啊，臭傻逼！');
+				}
+			)
+
+			$('div').css({
+				'width': '100px',
+				'height': '100px',
+				'background-color': 'blue',
+				'border':'1px solid white',
+				'position':'relative'
+			})
+
+			$('#second').click(function(){
+				$('div:not(div[class])').fadeToggle();
+			})
+			$('#third').click(function(){
+				$('div:not(div[class])').slideToggle();
+			})
+			$('#fourth').click(function(){
+				$('div:not(div[class])').animate({
+					width:'+=300px'
+				},'slow');
+			})
+			$('#fifth').click(function(){
+				alert($('[name=wenben]').val());
+			})
+			$('a').html(function(index, origin){
+				return $(this).attr('href')
+			});
+
+			var p = $('<p>这是一段文本</p>');
+			var div = $('<div>这是一个div</div>');
+			div.css({
+				'background-color':'#AAF'
+			})
+			div.attr('id','outerDiv');
+			$('body').append(div);
+			div.prepend(p);
+			p.before('我在p的前面');
+			div.after('我在div的后面');
+
+			$('body').append($('<button>移除上述div中的p</button>').click(function(){
+				p.remove("p");
+			}))
+
+		})
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>webworker</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var w = new Worker('/static/js/webworker.js');
+		w.onmessage = function(event){
+			console.log(event);
+		}
+		prompt(0);
+	</script>
+</body>
+</html>

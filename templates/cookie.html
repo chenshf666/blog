@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>cookie</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function Suptype1(){
+			this.name = 'sup';
+			console.log(this);
+		}
+
+		Suptype1.prototype.getName = function(){
+			return this.name;
+		}
+
+		function Subtype1(){
+			this.nname = 'sub';
+		}
+
+		Subtype1.prototype = new Suptype1();
+		Subtype1.prototype.getNname = function(){
+			return this.nname;
+		}
+
+
+		var sub1 = new Subtype1();
+		
+		console.log(sub1.getNname(), sub1.getName(), sub1 instanceof Subtype1,
+			sub1 instanceof Suptype1)
+
+		class Suptype2{
+			constructor(){
+				this.name = 'chenshf';
+			}
+			supsup(){
+
+			}
+		}
+
+		class Subtype2 extends Suptype2{
+			constructor(){
+				super();
+				this.nname = 'zihuan';
+			}
+			subsub(){
+
+			}
+		}
+
+		var sub2 = new Subtype2();
+		console.log(sub2.constructor);// 指向suptype2
+
+
+		//组合式继承
+		function Subtype3(){
+			Suptype1.call(this);
+			this.nname = 'subtype3';
+		}
+
+		Subtype3.prototype = new Suptype1();
+		Subtype3.prototype.constructor = Subtype3;
+		Subtype3.prototype.saynname = function(){return this.nname;}
+
+
+		console.log(new Subtype3());	
+
+
+		//原型式继承
+		function object(o){
+			function FFFF(){}
+			FFFF.prototype = o;
+			return new FFFF();
+		}
+
+		var person = {name:'chenshf',age:17};
+		console.log(object(person), Object.create(person));
+
+
+		//寄生组合式
+		function inherit(subType, supType){
+			subType.prototype = Object.create(supType.prototype);
+			subType.prototype.constructor = subType;
+		}
+
+		function Subtype4(){
+			Suptype1.call(this);
+			this.nname = 'chenshf';
+		}
+
+		inherit(Subtype4, Suptype1);
+		Subtype4.prototype.saynname = function(){
+			return this.nname;
+		}
+
+
+		console.log(new Subtype4());
+	</script>
+</body>
+</html>

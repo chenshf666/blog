@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	<meta charset="utf-8">
+	<title>vue入门</title>
+	<style type="text/css">
+		.class1{
+			background-color: #FFA;
+		}
+	</style>
+</head>
+<body>
+	{% verbatim %}
+	<div id="vue_det">
+		<h3>site:{{site}}</h3>
+		<div v-html="message"></div>
+		<div>
+			<input type="checkbox" v-model="use" style="display: inline-block;">
+			<span :class="{'class1':use}" @click="useChange">check to change my color</span>
+		</div>
+		<div>
+			<input type="text" v-model="color" style="display: inline-block;">
+			<span v-bind:style="'background-color:'+color">write to change my color</span>
+		</div>
+		<p>{{'to upper'|Upper|con}}</p>
+		<div v-if="color == 'A'">
+			type is A
+		</div>
+		<div v-else-if="color == 'B'">type is B</div>
+		<div v-else>
+			type is C
+		</div>
+		<ul>
+			<li v-for="person in people">
+
+				<span v-for="(value,key,index) in person">
+					{{index}}.{{key}}.{{value}}
+				</span>
+			</li>
+		</ul>
+		<p>原始字符串:{{msg}}</p>
+		<p>反转字符串:{{reversedMsg}}</p>
+	</div>
+
+	
+	<div id="compo">
+		<choose>self-define-component</choose>
+		<chenshf>I am chenshf</chenshf>
+		<neirong content='hello'></neirong><br>
+		<input type="text" v-model="msg" v-focus>
+		<dynamic :content='msg'></dynamic>
+		<valid prop-a='44'></valid>
+		<div>
+			{{total}}
+			<button-counter v-on:increment='increaseTotal'></button-counter>
+			<button-counter v-on:increment='increaseTotal'></button-counter>
+			<button-counter v-on:click='increaseTotal'></button-counter>
+			<button-counter v-on:click.native='increaseTotal'></button-counter>
+		</div>
+		<router-link to="/foo" tag='button'>Go to foo</router-link>
+		<router-link to="/bar" event='mouseover'>Go to bar</router-link>
+		<router-link :to='{path: "register", query:{plan:"private"}}' replace>query</router-link>
+		<router-link :to="{ path: 'relative/path'}" append>append</router-link>
+		<router-view></router-view>
+	</div>
+	<script type="text/javascript" src="/static/js/vue.js"></script>
+	<script type="text/javascript" src="/static/js/vue-router.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#vue_det',
+			data:{
+				site: 'Vegetable Teach',
+				url: 'http://www.chenshf.com',
+				alexa: '8888',
+				message: '<strong>粗体字</strong>',
+				use: false,
+				color: '#AAA',
+				people: [
+					{name:'chenshf', age:17},
+					{name:'zihuan', age:18},
+					{name:'xinpeng', age:17.5},
+					{name:'interset', age:1604}
+				],
+				msg: 'a interesting string',
+			},
+			methods:{
+				details: function(){
+					return this.site + 'I love ruby forever.';
+				},
+				useChange: function(){
+					this.use = !this.use;
+				}
+
+			},
+			filters:{
+				Upper: function(str){
+					return str.toUpperCase();
+				},
+				con: function(str){
+					return str + '---小尾巴';
+				}
+			},
+			computed:{
+				reversedMsg:{
+					get:function(){
+						return this.msg.split('').reverse().join('');
+					}
+				}
+			}
+		})
+
+		//全局组件
+		Vue.component('choose',{
+			template: '<h1>自定义组件</h1>'
+		})
+
+
+		//router
+		const Foo = {template: '<div>FOO</div>'};
+		const Bar = {template: '<div>BAR</div>'};
+
+		const routes = [
+			{path:'/foo', component:Foo},
+			{path:'/bar', component:Bar}
+		]
+
+		const router = new VueRouter({
+			routes:routes
+		})
+
+
+		//mixin混入
+		var myMixin = {
+			created: function(){
+				this.startMixin();
+			},
+			methods:{
+				startMixin(){
+					document.write('<strong>混入尝试</strong>')
+				},
+				hello(){
+					document.write('混入的hello');
+				},
+				hi(){
+					document.write('混入的hi');
+				}
+			}
+		}
+
+		//var Component = Vue.extend({
+		//	mixins: [myMixin]
+		//})
+		//var component = new Component();
+		var app = new Vue({
+			el:'#compo',
+			created: function(){
+				document.write('app创建');
+			},
+			mixins:[myMixin],
+			data:{
+				'msg': '动态props',
+				total: 0,
+				home: 'hhhome',
+
+			},
+			methods:{
+				increaseTotal: function(){
+					this.total += 1;
+				},
+				hello(){
+					document.write('app的hello');
+				}
+			},
+			components:{
+				'chenshf':{
+					template:'<h2>我是陈烁帆</h2>'
+				},
+				'neirong':{
+					props:['content'],
+					template:'<span>content is:{{content}}</span>',
+
+				},
+				'dynamic':{
+					props:['content'],
+					template:'<span>content is:{{content}}</span>',
+				},
+				'valid':{
+					props:{
+						propA:{
+							type: String,
+							default: 100
+						}
+					},
+					template:'<p>{{propA}}</p>'
+				},
+				'button-counter':{
+					data: function(){
+						return {
+							counter: 0
+						}
+					},
+					template: '<button v-on:click="increaseCounter">{{counter}}</button>',
+					methods:{
+						increaseCounter: function(){
+							this.counter += 1;
+							this.$emit('increment')
+						}
+					}
+				}
+			},
+			directives:{
+				focus:{
+					inserted: function(ele){
+						ele.focus();
+					}
+				}
+			},
+			router:router,
+
+		})
+
+		app.hello();
+		app.hi();
+	</script>
+	{% endverbatim %}
+</body>
+</html>
+
+
+<!--
+	<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="/static/js/vue.js"></script>
+</head>
+<body>
+
+{% verbatim %}
+<div id="app">
+     <p>{{ message }}</p>
+</div>
+
+<script type="text/javascript">
+    
+  var app = new Vue({
+      el: '#app',
+      data: {
+          message : "xuxiao is boy" 
+      },
+       beforeCreate: function () {
+                console.group('beforeCreate 创建前状态===============》');
+               console.log("%c%s", "color:red" , "el     : " + this.$el); //undefined
+               console.log("%c%s", "color:red","data   : " + this.$data); //undefined 
+               console.log("%c%s", "color:red","message: " + this.message);
+        },
+        created: function () {
+            console.group('created 创建完毕状态===============》');
+            console.log("%c%s", "color:red","el     : " + this.$el); //undefined
+               console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化 
+               console.log("%c%s", "color:red","message: " + this.message); //已被初始化
+
+        },
+        beforeMount: function () {
+            console.group('beforeMount 挂载前状态===============》');
+            console.log("%c%s", "color:red","$el     : " + (this.$el)); //已被初始化
+            console.log("%c%s", "color:red","el     : " + (this.el));
+            console.log(this.$el);
+               console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化  
+               console.log("%c%s", "color:red","message: " + this.message); //已被初始化  
+        },
+        mounted: function () {
+            console.group('mounted 挂载结束状态===============》');
+            console.log("%c%s", "color:red","$el     : " + this.$el); //已被初始化
+            console.log(this.$el);    
+               console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化
+               console.log("%c%s", "color:red","message: " + this.message); //已被初始化 
+        },
+        beforeUpdate: function () {
+            console.group('beforeUpdate 更新前状态===============》');
+            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log(this.$el);   
+               console.log("%c%s", "color:red","data   : " + this.$data); 
+               console.log("%c%s", "color:red","message: " + this.message); 
+        },
+        updated: function () {
+            console.group('updated 更新完成状态===============》');
+            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log(this.$el); 
+               console.log("%c%s", "color:red","data   : " + this.$data); 
+               console.log("%c%s", "color:red","message: " + this.message); 
+        },
+        beforeDestroy: function () {
+            console.group('beforeDestroy 销毁前状态===============》');
+            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log(this.$el);    
+               console.log("%c%s", "color:red","data   : " + this.$data); 
+               console.log("%c%s", "color:red","message: " + this.message); 
+        },
+        destroyed: function () {
+            console.group('destroyed 销毁完成状态===============》');
+            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log(this.$el);  
+               console.log("%c%s", "color:red","data   : " + this.$data); 
+               console.log("%c%s", "color:red","message: " + this.message)
+        }
+    })
+{% endverbatim %}
+</script>
+</body>
+</html>-->

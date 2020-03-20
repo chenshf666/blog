@@ -6,7 +6,8 @@
 }
 
 @media screen{
-
+body{
+}
 input{
 	display: block;
 }

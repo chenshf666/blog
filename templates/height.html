@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>关于各种height</title>
+	<style type="text/css">
+
+		textarea{
+			width: 600px;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body >
+	<div id="vvv">
+	<textarea v-model='heights'>
+		
+	</textarea>
+	</div>
+	<p>Promise 是异步编程的一种解决方案： 从语法上讲，promise是一个对象，从它可以获取异步操作的消息；从本意上讲，它是承诺，承诺它过一段时间会给你一个结果。 promise有三种状态：pending(等待态)，fulfiled(成功态)，rejected(失败态)；状态一旦改变，就不会再变。创造promise实例后，它会立即执行。</p>
+	<script type="text/javascript" src="/static/vue.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#vvv',
+			data:{
+				allHeight:[]
+			},
+			computed:{
+				heights:function(){
+					return this.allHeight.valueOf();
+				}
+			}
+		})
+
+
+		setInterval(function(){
+			vm.allHeight = [
+				window.innerHeight, //随着手机端缩放改变，为当前视口的逻辑像素大小
+				window.innerWidth, //浏览器视口大小，包含了滚动条大小，这个是视觉窗口大小
+				document.documentElement.clientHeight,
+				document.documentElement.clientWidth, //视口大小，不包含滚动条,在手机端，与viewport的大小相同
+				//上面两个都会随着电脑端缩放改变时
+				//说明viewport定义的是布局视口，决定实际布局的时候的大小，
+				document.body.clientWidth,	//在手机端不会随着缩放变化
+				document.body.clientHeight, //是网页的实际宽高
+				window.outerHeight, // 不会随着窗口缩放改变
+				window.outerWidth, //浏览器窗口大小，在手机端是理想视口大小
+				//理想视口的值其实就是屏幕分辨率的值，它对应的像素叫做设备逻辑像素（device independent pixel, dip）。dip 和设备的物理像素无关，一个 dip 在任意像素密度的设备屏幕上都占据相同的空间。如果用户没有进行缩放，那么一个 CSS 像素就等于一个 dip。用device-width设置viewport可以使布局视口与理想视口的宽度一致：
+				window.devicePixelRatio
+			]
+		},1000);
+	</script>
+</body>
+</html>

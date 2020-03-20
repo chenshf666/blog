@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>手写promise</title>
+</head>
+<body>
+	<button>触发then</button>
+	<script type="text/javascript" src="/static/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var p = new Promise(function(resolve, reject){
+				console.log('nihao1');
+				resolve(1);
+				console.log('nihao2');
+			})
+			$('button').click(function(event){
+				p.then(function(data){
+					console.log(data);
+					console.log('hello');
+					return new Promise(function(resolve, reject){
+						resolve('two');
+					})
+				}).then((data)=>{
+					console.log(data);
+					
+				}).then((data)=>{
+					console.log('if last not return',data)
+				}).then(function(){
+					return Promise.resolve(1);
+				}).then(function(data){
+					console.log('with promise in then',data)
+				})
+			})
+
+			function bbind(context,...args){
+				return (...args2)=>{
+					this.call(context,...args,...args2);
+					}
+			}
+
+			Function.prototype.bbind = bbind;
+
+			function nihao(a,b){
+				console.log(this,a,b);
+			}
+			var person = {name:'chenshf'};
+			nihao.bbind(person,2)(9911);
+
+
+			var p2 = new Promise(function(resolve,reject){
+				//如果已经resolve，运行时出错会被忽略
+				throw "error";
+				resolve(2);
+				setTimeout(console.log.bind(console,'1000ms later'),1000);
+				
+			})
+
+			p2.then(()=>{
+				console.log('hello');
+			}).catch((e)=>{
+				console.log(e);
+			})
+		})
+
+		class Proomise{
+			constructor(executor){
+				this.status = 'pending';
+				this.value = undefined; //show resolve(value)
+				this.reason = undefined; //show reject(value)
+				this.resolveQueue = []; //when use then, but status is pending , we should put them in the queue
+										//and execute when the status change
+				this.rejectQueue = []; // same as below
+				let resolve = (value)=>{
+					this.status = 'resolved';
+					this.value = value;
+					this.resolveQueue.forEach(fn=>fn());
+				}
+
+				let reject = (reason)=>{
+					this.reason = reason;
+					this.status = 'rejected';
+					this.rejectQueue.forEach(fn=>fn());
+				}
+
+				try{
+					executor(resolve,reject);
+				}catch(e){
+					reject(e);
+				}
+			}
+
+			then(onSuccess, onFail){
+				switch(this.status){
+					case "pending":
+						this.resolveQueue.push(()=>{
+							onSuccess(this.value);
+						});
+						this.rejectQueue.push(()=>{
+							onFail(this.reason);
+						})
+						break;
+					case 'resolved':
+						onSuccess(this.value);
+						break;
+					case 'rejected':
+						onFail(this.reason);
+						break;
+				}
+			}
+		}
+
+		var test = new Proomise(function(resolve,reject){
+			resolve(1);
+		})
+
+		console.log(test);
+
+		function hello(f){
+			let ff = function(){
+				console.log(this);
+			}
+			f(ff);
+		}
+
+		class Hello{
+			constructor(f){
+				let ff = function(){
+					console.log(this);
+				}
+
+				ff();
+				f(ff);
+			}
+			hh(f){
+				let ff = function(){
+					console.log(this);
+				}
+				ff();
+				f(ff);
+			}
+		}
+
+		function f(ff){
+			ff();
+
+		}
+
+		//var a = new hello(f);
+		var b = new Hello(f);
+		b.hh(f);
+		
+	</script>
+</body>
+</html>

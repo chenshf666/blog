@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>节流和防抖</title>
+</head>
+<body>
+	<div>
+		节流（每隔一段时间才触发一次)
+		<div id="jieliu">
+			
+		</div>
+	</div>
+	<div>
+		防抖（抖动停止才执行）
+		<div id="fangdou">
+			
+		</div>
+	</div>
+	<script type="text/javascript">
+		var jieliu = document.getElementById('jieliu');
+		var fangdou = document.getElementById('fangdou');
+
+		jieliu.style.cssText = 'width:100px;height:100px;background-color:blue;';
+		fangdou.style.cssText = 'width:100px;height:100px;background-color:blue;';
+
+		function randint(a,b){
+			var rand = Math.random(a,b);
+			return Math.floor(rand*(b-a) + a);
+		}
+
+		function jieliuF(fn, context){
+			var time = null;
+			return function(event){
+				if(time == null){
+					time = setTimeout(function(){
+						time = null;
+						fn.call(context);
+					}, 1000);
+				}
+			}
+		}
+
+		function fangdouF(fn, context){
+			var time = null;
+			return function(event){
+				clearTimeout(time);
+				time = setTimeout(fn.bind(context), 200);
+			}
+		}
+
+		function changeColor(){
+			var r = randint(0,255), g = randint(0,255), b = randint(0,255);
+			this.style.backgroundColor = `rgb(${r},${g},${b})`;
+		}
+
+		jieliu.addEventListener('mousemove',jieliuF(changeColor,jieliu));
+		fangdou.addEventListener('mousemove',fangdouF(changeColor, fangdou));
+	</script>
+</body>
+</html>
