@@ -31,6 +31,10 @@ class User(models.Model):
 
 class Blog(models.Model):
   id = models.AutoField(primary_key=True)
-  author = models.CharField(max_length=20)
+  author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
   title = models.CharField(max_length=50)
   content = models.TextField()
+  time = models.DateTimeField(auto_now=True)
+  urls = models.TextField()
+
+

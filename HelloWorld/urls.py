@@ -37,6 +37,7 @@ urlpatterns = [
     path('validate', view.validate),
     path('add_blog', view.add_blog),
     path('get_blogs', view.get_blogs),
+    path('get_single_blog',view.get_single_blog),
     
     path('xdm/',view.xdm),
     path('socket/',view.socket),

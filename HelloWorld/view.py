@@ -135,8 +135,10 @@ def login(request):
     post_content = json.loads(request.body, encoding='utf-8')
     username = post_content['username']
     password = post_content['password']
-    if User.objects.filter(username=username,password=password):
+    result = User.objects.filter(username=username,password=password)
+    if result:
         payload = {
+          'id': result[0].id,
           'username':username,
           'exp':int(time.time()+3600) # 有效期3600秒
         }
@@ -160,28 +162,75 @@ def validate(request):
 
 @csrf_exempt
 def add_blog(request):
-    post_content = json.loads(request.body, encoding='utf-8')
+    post_content = request.POST#json.loads(request.body, encoding='utf-8')
     token = post_content['token']
     content = post_content['content']
     title = post_content['title']
+
 
     try:
         decoded = jwt.decode(token, secret_key, algorithms='HS256')
     except:
         return HttpResponse(json.dumps({'status':1, 'msg':'身份验证失败，请重新登录'}))
 
-    author = decoded['username']
+    author_id = decoded['id']
     try:
-        blog = Blog(author=author, content=content, title=title)
+        blog = Blog(author_id=author_id, content=content, title=title, )
+        blog.save()
+
+        id = str(blog.id)
+        urls = []
+        dir = os.path.join(os.path.join(BASE_DIR, 'static'), 'images')
+        for key in request.FILES:
+            img = request.FILES[key]
+            destination = open(os.path.join(dir, id+'____'+key),
+                                   'wb+')
+            for chunk in img.chunks():
+                destination.write(chunk)
+            destination.close()
+            urls.append('/static/images/'+id+'____'+key)
+
+        blog.urls = json.dumps(urls)
         blog.save()
         return HttpResponse(json.dumps({'status':0, 'msg':'发布成功'}))
-    except:
+    except Exception as e:
+        print(e)
         return HttpResponse(json.dumps({'status':2, 'msg':'发生异常'}))
 
 
 from django.core import serializers
 def get_blogs(request):
-    blogs = Blog.objects.all()
-    json_data = serializers.serialize('json', blogs)
-    #json_data = json.loads(json_data)
+    page = int(request.GET['page'])
+    try:
+        queryResult = Blog.objects.order_by('-time').all()[page*10:(page+1)*10]
+    except:
+        queryResult = []
+    blogs = []
+    for r in queryResult:
+        blogs.append({
+            'id':r.id,
+            'author':r.author.username,
+            'title':r.title,
+            'content':r.content[:50],
+        })
+    json_data = json.dumps(blogs)
+
     return HttpResponse(json_data)
+
+
+def get_single_blog(request):
+    id = request.GET['id']
+    blog = Blog.objects.get(id=id)
+    dict = {
+        'id':id,
+        'author_id':blog.author.id,
+        'author':blog.author.username,
+        'title':blog.title,
+        'content':blog.content,
+        'img_urls':blog.urls,
+        'create_time':blog.time.strftime('%Y-%m-%d %H:%M:%S'),
+    }
+
+    return HttpResponse(json.dumps(dict))
+
+
