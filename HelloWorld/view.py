@@ -116,14 +116,14 @@ def register(request):
     username = post_content['username']
     password = post_content['password']
     if User.objects.filter(username=username):
-        return HttpResponse('已经被注册')
+        return HttpResponse(json.dumps({'status':1,'msg':'已经被注册'}))
     else:
       try:
           user = User(id=User.objects.count(), username=username, password=password)
           user.save()
-          return HttpResponse('注册成功')
+          return HttpResponse(json.dumps({'status':0,'msg':'注册成功'}))
       except:
-          return HttpResponse('异常');
+          return HttpResponse(json.dumps({'status':2,'msg':'发生异常'}))
 
 import time
 import jwt
@@ -211,7 +211,7 @@ def get_blogs(request):
             'id':r.id,
             'author':r.author.username,
             'title':r.title,
-            'content':r.content[:50],
+            'content':r.content[:500],
         })
     json_data = json.dumps(blogs)
 
