@@ -23,7 +23,7 @@ from . import testdb,search,search2
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 urlpatterns = [
-    path('',view.home),
+    path('home',view.home),
     path('htmlcss/',view.htmlcss),
     re_path('^frame',view.frame),
     path('js/',view.js),
@@ -31,13 +31,14 @@ urlpatterns = [
     path('form/',view.form),
     re_path('^new-',view.all),
     
-    
-    path('register', view.register),
-    path('login', view.login),
-    path('validate', view.validate),
-    path('add_blog', view.add_blog),
-    path('get_blogs', view.get_blogs),
-    path('get_single_blog',view.get_single_blog),
+    path('',view.blog),
+    path('api/register', view.register),
+    path('api/login', view.login),
+    path('api/validate', view.validate),
+    path('api/add_blog', view.add_blog),
+    path('api/get_blogs', view.get_blogs),
+    path('api/get_single_blog',view.get_single_blog),
+    path('api/delete_blog', view.delete_blog),
     
     path('xdm/',view.xdm),
     path('socket/',view.socket),

@@ -110,6 +110,8 @@ def socket(request):
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import json
 
+def blog(request):
+    return render(request,'index.html',{})
 @csrf_exempt
 def register(request):
     post_content = json.loads(request.body, encoding='utf-8')
@@ -201,8 +203,13 @@ def add_blog(request):
 from django.core import serializers
 def get_blogs(request):
     page = int(request.GET['page'])
+    author = request.GET['author']
     try:
-        queryResult = Blog.objects.order_by('-time').all()[page*10:(page+1)*10]
+        if len(author) > 0:
+            author_id = User.objects.filter(username=author)[0].id
+            queryResult = Blog.objects.filter(author_id=author_id).order_by('-time').all()[page*10:(page+1)*10]
+        else:
+            queryResult = Blog.objects.order_by('-time').all()[page * 10:(page + 1) * 10]
     except:
         queryResult = []
     blogs = []
@@ -232,5 +239,31 @@ def get_single_blog(request):
     }
 
     return HttpResponse(json.dumps(dict))
+
+@csrf_exempt
+def delete_blog(request):
+    post_content = json.loads(request.body, encoding='utf-8')
+    id = post_content['id']
+    token = post_content['token']
+    try:
+        decoded = jwt.decode(token, secret_key, algorithm='HS256')
+    except:
+        return HttpResponse(json.dumps({'status': 1, 'msg':'身份验证失败，请重新登录'}))
+    author_id = decoded['id']
+    blogs = Blog.objects.filter(id=id,author_id=author_id)
+    if blogs:
+        try:
+            urls = json.loads(blogs[0].urls)
+            for path in urls:
+                imgPath = os.path.join(BASE_DIR, path[1:])
+                if os.path.exists(imgPath):
+                    os.remove(imgPath)
+            blogs[0].delete()
+            return HttpResponse(json.dumps({'status': 0, 'msg': '删除成功'}))
+        except:
+            return HttpResponse(json.dumps({'status': 2, 'msg': '发生异常'}))
+    else:
+        return HttpResponse(json.dumps({'status': 1, 'msg': '身份验证失败，请重新登录'}))
+
 
 
