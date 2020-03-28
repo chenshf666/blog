@@ -19,7 +19,8 @@ from django.conf.urls import url
 
 from . import view
 from . import testdb,search,search2
-
+from . import settings
+from django.conf.urls.static import static
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 urlpatterns = [
@@ -50,4 +51,4 @@ urlpatterns = [
     url(r'^search$', view.search),
     url(r'^search-post$', search2.search_post),
     url(r'^admin/', admin.site.urls)
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

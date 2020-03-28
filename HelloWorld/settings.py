@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'HelloWorld.middle.crossXHR',
+    'django.middleware.gzip.GZipMiddleware',
     #'dwebsocket.middleware.WebSocketMiddleware'  # 为所有的URL提供websocket，如果只是单独的视图需要可以不选
 ]
 
@@ -130,6 +131,13 @@ USE_TZ = False
 STATIC_ROOT = os.path.join(BASE_DIR,'mystatic')#'/var/web')
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+
+MEDIAFILES_DIRS = [
+  os.path.join(BASE_DIR, 'uploads'),
+  os.path.join(BASE_DIR, 'uploads/images'),
+]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'static/images'),

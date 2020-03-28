@@ -182,7 +182,7 @@ def add_blog(request):
 
         id = str(blog.id)
         urls = []
-        dir = os.path.join(os.path.join(BASE_DIR, 'static'), 'images')
+        dir = os.path.join(os.path.join(BASE_DIR, 'uploads'), 'images')
         for key in request.FILES:
             img = request.FILES[key]
             destination = open(os.path.join(dir, id+'____'+key),
@@ -190,7 +190,7 @@ def add_blog(request):
             for chunk in img.chunks():
                 destination.write(chunk)
             destination.close()
-            urls.append('/static/images/'+id+'____'+key)
+            urls.append('/uploads/images/'+id+'____'+key)
 
         blog.urls = json.dumps(urls)
         blog.save()

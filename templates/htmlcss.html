@@ -8,10 +8,19 @@
 	<title>前端苦逼学习</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/home.css">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-	
+	<style>
+    .class2{
+      color: blue;
+    }
+    .class1{
+      color: red;
+    }
+    
+  </style>
 
 </head>
 <body oncopy="return false">
+  <div class="class2 class1">测试</div>
 	{% load static %}
     <form action="/blog-submit" method="post" enctype="multipart/form-data">
         {% csrf_token %}

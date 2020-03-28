@@ -7,7 +7,6 @@
 	<script type="text/javascript">
 		function Suptype1(){
 			this.name = 'sup';
-			console.log(this);
 		}
 
 		Suptype1.prototype.getName = function(){
@@ -95,6 +94,13 @@
 
 
 		console.log(new Subtype4());
+    
+    function Subtype5(){
+      Suptype1.call(this);
+      this.nname = 'chenshf';
+    }
+    //Object.setPrototypeOf(Subtype5, Suptype1);
+    Object.setPrototypeOf(Subtype5.prototype, Suptype1.prototype);
 	</script>
 </body>
 </html>
